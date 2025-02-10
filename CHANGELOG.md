@@ -1,5 +1,28 @@
 # Change Log
 
+## [7.33.0](https://github.com/auth0/auth0.net/tree/7.33.0) (2025-02-05)
+[Full Changelog](https://github.com/auth0/auth0.net/compare/7.32.0...7.33.0)
+
+**Added**
+- Adds support for managing SNS configuration - Push Notification - MFA policies [\#775](https://github.com/auth0/auth0.net/pull/775) ([kailash-b](https://github.com/kailash-b))
+- Update documentation to clarify LoginHint.Issuer field usage in CIBA context [\#773](https://github.com/auth0/auth0.net/pull/773) ([kailash-b](https://github.com/kailash-b))
+- Add support for /guardian end-points [\#771](https://github.com/auth0/auth0.net/pull/771) ([kailash-b](https://github.com/kailash-b))
+
+**Changed**
+- Allow Optional AssignMembershipOnLogin field to be nullable [\#776](https://github.com/auth0/auth0.net/pull/776) ([kailash-b](https://github.com/kailash-b))
+
+## [7.32.0](https://github.com/auth0/auth0.net/tree/7.32.0) (2025-01-22)
+[Full Changelog](https://github.com/auth0/auth0.net/compare/7.31.0...7.32.0)
+
+**Added**
+- Add support to manage /flows endpoints [\#765](https://github.com/auth0/auth0.net/pull/765) ([kailash-b](https://github.com/kailash-b))
+- Add support to Update a Custom Domain [\#763](https://github.com/auth0/auth0.net/pull/763) ([kailash-b](https://github.com/kailash-b))
+- Adds CnameApiKey to CustomDomainVerificationResponse (#757) [\#764](https://github.com/auth0/auth0.net/pull/764) ([tmschlot](https://github.com/tmschlot))
+
+**Fixed**
+- Added missing user ID field in Device Credentials class [\#768](https://github.com/auth0/auth0.net/pull/768) ([Mohsens22](https://github.com/Mohsens22))
+- Added missing fields to LogEntry (#766) [\#767](https://github.com/auth0/auth0.net/pull/767) ([Mohsens22](https://github.com/Mohsens22))
+
 ## [7.31.0](https://github.com/auth0/auth0.net/tree/7.31.0) (2025-01-08)
 [Full Changelog](https://github.com/auth0/auth0.net/compare/7.30.0...7.31.0)
 
@@ -11,10 +34,14 @@
 [Full Changelog](https://github.com/auth0/auth0.net/compare/7.29.0...7.30.0)
 
 **Added**
-- Adds Checkpoint Pagination support for fetching all connections [\#752](https://github.com/auth0/auth0.net/pull/752) ([kailash-b](https://github.com/kailash-b))
 - Adds support for managing custom-text and partial-prompts [\#749](https://github.com/auth0/auth0.net/pull/749) ([kailash-b](https://github.com/kailash-b))
 - Adds support for Self-Service-Profile endpoints [\#747](https://github.com/auth0/auth0.net/pull/747) ([kailash-b](https://github.com/kailash-b))
 - Support PhoneNumber as a flexible identifier [\#746](https://github.com/auth0/auth0.net/pull/746) ([kailash-b](https://github.com/kailash-b))
+
+**Changed**
+- Adds Checkpoint Pagination support for fetching all connections [\#752](https://github.com/auth0/auth0.net/pull/752) ([kailash-b](https://github.com/kailash-b))
+
+Note this change can cause compilation errors (ambiguous invocation) in cases where the code was calling `GetAllAsync` method in `ConnectionsClient` with only the first parameter. The users are recommended to choose the pagination explicitly after going through the recommendations in the [documentation](https://auth0.com/docs/api/management/v2/connections/get-connections)
 
 ## [7.29.0](https://github.com/auth0/auth0.net/tree/7.29.0) (2024-11-08)
 [Full Changelog](https://github.com/auth0/auth0.net/compare/7.28.0...7.29.0)

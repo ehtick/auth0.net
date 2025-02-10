@@ -119,7 +119,9 @@ namespace Auth0.ManagementApi.IntegrationTests
                 var request = new CreateGuardianEnrollmentTicketRequest
                 {
                     UserId = user.UserId,
-                    MustSendMail = false
+                    MustSendMail = false,
+                    EmailAddress = user.Email,
+                    EmailLocale = "en-US"
                 };
                 var response = await fixture.ApiClient.Guardian.CreateEnrollmentTicketAsync(request);
                 response.TicketId.Should().NotBeNull();
@@ -206,22 +208,237 @@ namespace Auth0.ManagementApi.IntegrationTests
         [Fact]
         public async Task Can_update_phone_messagetypes()
         {
-            GuardianPhoneMessageTypes response;
-
-            response = await fixture.ApiClient.Guardian.UpdatePhoneMessageTypesAsync(new GuardianPhoneMessageTypes
-            {
-                MessageTypes = new List<string> { "sms" }
-            });
+            var response = 
+                await fixture.ApiClient.Guardian.UpdatePhoneMessageTypesAsync(
+                    new GuardianPhoneMessageTypes
+                    {
+                        MessageTypes = new List<string> { "sms" }
+                    });
+            
             response.MessageTypes.Count.Should().Be(1);
 
-            response = await fixture.ApiClient.Guardian.UpdatePhoneMessageTypesAsync(new GuardianPhoneMessageTypes
-            {
-                MessageTypes = new List<string> { "sms", "voice" }
-            });
+            response = await fixture.ApiClient.Guardian.UpdatePhoneMessageTypesAsync(
+                new GuardianPhoneMessageTypes
+                {
+                    MessageTypes = new List<string> { "sms", "voice" }
+                });
+            
             response.MessageTypes.Count.Should().Be(2);
 
             response = await fixture.ApiClient.Guardian.GetPhoneMessageTypesAsync();
             response.MessageTypes.Count.Should().Be(2);
+        }
+        
+        [Fact]
+        public async Task Update_Get_duo_configuration_successfully()
+        {
+            var configurationPatchRequestRequest = new DuoConfigurationPatchRequest()
+            {
+                Host = "api-hostname",
+                Ikey = "someKey",
+                Skey = "someSecret"
+            };
+            var configurationPutRequestRequest = new DuoConfigurationPutRequest()
+            {
+                Host = "api-hostname",
+                Ikey = "someKey",
+                Skey = "someSecret"
+            };
+            
+            // Update using PATCH 
+            var updatedDuoConfiguration =
+                await fixture.ApiClient.Guardian.UpdateDuoConfigurationAsync(configurationPatchRequestRequest);
+            updatedDuoConfiguration.Should().NotBeNull();
+            updatedDuoConfiguration.Ikey.Should().Be("someKey");
+            updatedDuoConfiguration.Skey.Should().Be("someSecret");
+            updatedDuoConfiguration.Host.Should().Be("api-hostname");
+            
+            // Update using PUT
+            updatedDuoConfiguration =
+                await fixture.ApiClient.Guardian.UpdateDuoConfigurationAsync(configurationPutRequestRequest);
+            updatedDuoConfiguration.Should().NotBeNull();
+            updatedDuoConfiguration.Ikey.Should().Be("someKey");
+            updatedDuoConfiguration.Skey.Should().Be("someSecret");
+            updatedDuoConfiguration.Host.Should().Be("api-hostname");
+            
+            // Get DUO configuration
+            var duoConfiguration = await fixture.ApiClient.Guardian.GetDuoConfigurationAsync();
+            duoConfiguration.Should().NotBeNull();
+            duoConfiguration.Ikey.Should().Be("someKey");
+            duoConfiguration.Skey.Should().Be("someSecret");
+            duoConfiguration.Host.Should().Be("api-hostname");
+        }
+
+        [Fact]
+        public async void Update_Get_PhoneProviderConfiguration_successfully()
+        {
+            var phoneProviderConfiguration = new PhoneProviderConfiguration()
+            {
+                PhoneProvider = PhoneProvider.Auth0,
+            };
+
+            // update phone provider configuration
+            var updatedProviderConfiguration = 
+                await fixture.ApiClient.Guardian.UpdatePhoneProviderConfigurationAsync(phoneProviderConfiguration);
+            updatedProviderConfiguration.Should().NotBeNull();
+            updatedProviderConfiguration.PhoneProvider.Should().Be(PhoneProvider.Auth0);
+            
+            // Get the Phone provider configuration explicitly
+            phoneProviderConfiguration = await fixture.ApiClient.Guardian.GetPhoneProviderConfigurationAsync();
+            phoneProviderConfiguration.Should().NotBeNull();
+            phoneProviderConfiguration.PhoneProvider.Should().Be(PhoneProvider.Auth0);
+        }
+        
+        [Fact]
+        public async void Update_Get_GuardianPhoneEnrollmentTemplate_successfully()
+        {
+            var phoneEnrollmentTemplate = new GuardianPhoneEnrollmentTemplate()
+            {
+                EnrollmentMessage = "Enrollment message",
+                VerificationMessage = "Verification message"
+            };
+
+            // update phone enrollment template 
+            var updatedPhoneEnrollmentTemplate = 
+                await fixture.ApiClient.Guardian.UpdatePhoneEnrollmentTemplateAsync(phoneEnrollmentTemplate);
+            updatedPhoneEnrollmentTemplate.Should().NotBeNull();
+            updatedPhoneEnrollmentTemplate.Should().BeEquivalentTo(phoneEnrollmentTemplate);
+            
+            // Get the phone enrollment template configuration explicitly
+            var fetchedPhoneEnrollmentTemplate = await fixture.ApiClient.Guardian.GetPhoneEnrollmentTemplateAsync();
+            fetchedPhoneEnrollmentTemplate.Should().NotBeNull();
+            fetchedPhoneEnrollmentTemplate.Should().BeEquivalentTo(phoneEnrollmentTemplate);
+        }
+        
+        [Fact(Skip = "Run Manually - Requires certificate setup.")]
+        public async void Update_Get_PushNotificationApnsProviderConfiguration_successfully()
+        {
+            var apnsConfigurationPutUpdateRequest = new PushNotificationApnsConfigurationPutUpdateRequest()
+            {
+                BundleId = "com.auth0.test",
+                Sandbox = true,
+                P12 = "random_string"
+            };
+            
+            var apnsConfigurationPatchUpdateRequest = new PushNotificationApnsConfigurationPatchUpdateRequest()
+            {
+                BundleId = "com.auth0.test",
+                Sandbox = false,
+                P12 = "random_string"
+            };
+
+            // update Push notification APNS provider configuration using PUT
+            var apnsConfigurationUpdateResponse = 
+                await fixture.ApiClient.Guardian.UpdatePushNotificationApnsProviderConfigurationAsync(apnsConfigurationPutUpdateRequest);
+            apnsConfigurationUpdateResponse.Should().NotBeNull();
+            
+            apnsConfigurationUpdateResponse.Sandbox.Should().Be(apnsConfigurationPutUpdateRequest.Sandbox);
+            apnsConfigurationUpdateResponse.BundleId.Should().Be(apnsConfigurationPutUpdateRequest.BundleId);
+            
+            // update Push notification APNS provider configuration using PATCH
+            apnsConfigurationUpdateResponse = 
+                await fixture.ApiClient.Guardian.UpdatePushNotificationApnsProviderConfigurationAsync(apnsConfigurationPutUpdateRequest);
+            apnsConfigurationUpdateResponse.Should().NotBeNull();
+            
+            apnsConfigurationUpdateResponse.Sandbox.Should().Be(apnsConfigurationPutUpdateRequest.Sandbox);
+            apnsConfigurationUpdateResponse.BundleId.Should().Be(apnsConfigurationPutUpdateRequest.BundleId);
+            
+            // Get the phone enrollment template configuration explicitly
+            var fetchedApnsProviderConfiguration = await fixture.ApiClient.Guardian.GetPushNotificationApnsProviderConfigurationAsync();
+            fetchedApnsProviderConfiguration.Should().NotBeNull();
+            fetchedApnsProviderConfiguration.Sandbox.Should().Be(apnsConfigurationPatchUpdateRequest.Sandbox);
+            fetchedApnsProviderConfiguration.BundleId.Should().Be(apnsConfigurationPatchUpdateRequest.BundleId);
+        }
+
+        [Fact(Skip = "Run Manually - Requires FCM setup")]
+        public async void Test_Update_Fcm_configuration_successfully()
+        {
+            var fcmConfigurationPatchUpdateRequest = new FcmConfigurationPatchUpdateRequest()
+            {
+                ServerKey = "server_key"
+            };
+            
+            var fcmConfigurationPutUpdateRequest = new FcmConfigurationPutUpdateRequest()
+            {
+                ServerKey = "server_key"
+            };
+            
+            var fcmV1ConfigurationPatchUpdateRequest = new FcmV1ConfigurationPatchUpdateRequest()
+            {
+                ServerCredentials = "server_credentials"
+            };
+            
+            var fcmV1ConfigurationPutUpdateRequest = new FcmV1ConfigurationPutUpdateRequest()
+            {
+                ServerCredentials = "server_credentials"
+            };
+            
+            // Update FCM configuration with Patch
+            var response =
+                await fixture.ApiClient.Guardian.UpdatePushNotificationFcmConfigurationAsync(fcmConfigurationPatchUpdateRequest);
+            response.Should().NotBeNull();
+            
+            // Update FCM configuration with Put
+            response =
+                await fixture.ApiClient.Guardian.UpdatePushNotificationFcmConfigurationAsync(fcmConfigurationPutUpdateRequest);
+            response.Should().NotBeNull();
+            
+            // Update FCMV1 configuration with Patch
+            response =
+                await fixture.ApiClient.Guardian.UpdatePushNotificationFcmV1ConfigurationAsync(fcmV1ConfigurationPatchUpdateRequest);
+            response.Should().NotBeNull();
+            
+            // Update FCMV1 configuration with Put
+            response =
+                await fixture.ApiClient.Guardian.UpdatePushNotificationFcmV1ConfigurationAsync(fcmV1ConfigurationPutUpdateRequest);
+            response.Should().NotBeNull();
+        }
+        
+        [Fact]
+        public async void Update_Get_PushNotificationProviderConfiguration_successfully()
+        {
+            var pushNotificationProviderConfiguration = new PushNotificationProviderConfiguration()
+            {
+                PushNotificationProvider = PushNotificationProvider.Direct,
+            };
+
+            // update push notification provider configuration
+            var updatedProviderConfiguration = 
+                await fixture.ApiClient.Guardian.UpdatePushNotificationProviderConfigurationAsync(
+                    pushNotificationProviderConfiguration);
+            
+            updatedProviderConfiguration.Should().NotBeNull();
+            updatedProviderConfiguration.PushNotificationProvider.Should().Be(PushNotificationProvider.Direct);
+            
+            // Get the Push Notification provider configuration explicitly
+            pushNotificationProviderConfiguration = 
+                await fixture.ApiClient.Guardian.GetPushNotificationProviderConfigurationAsync();
+            pushNotificationProviderConfiguration.Should().NotBeNull();
+            updatedProviderConfiguration.PushNotificationProvider.Should().Be(PushNotificationProvider.Direct);
+        }
+        
+        [Fact]
+        public async void Update_Get_MultifactorAuthenticationPolicies_successfully()
+        {
+            try
+            {
+                // update MFA policy
+                var updatedMfaPolicy =
+                    await fixture.ApiClient.Guardian.UpdateMultifactorAuthenticationPolicies(["all-applications"]);
+
+                updatedMfaPolicy.Should().NotBeNull();
+                updatedMfaPolicy.Should().BeEquivalentTo(["all-applications"]);
+
+                // Get the Push Notification provider configuration explicitly
+                var mfaPolicy =
+                    await fixture.ApiClient.Guardian.GetMultifactorAuthenticationPolicies();
+                mfaPolicy.Should().NotBeNull();
+                mfaPolicy.Should().BeEquivalentTo(["all-applications"]);
+            }
+            finally
+            {
+                await fixture.ApiClient.Guardian.UpdateMultifactorAuthenticationPolicies([]);    
+            }
         }
     }
 }

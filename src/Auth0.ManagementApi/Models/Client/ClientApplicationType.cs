@@ -131,5 +131,29 @@ public enum ClientApplicationType
     /// Zoom (SSO)
     /// </summary>
     [EnumMember(Value = "zoom")]
-    Zoom
+    Zoom,
+    
+    /// <summary>
+    /// Resource Server
+    /// </summary>
+    [EnumMember(Value = "resource_server")]
+    ResourceServer,
+    
+    /// <summary>
+    /// Express Configuration
+    /// </summary>
+    [EnumMember(Value = "express_configuration")]
+    ExpressConfiguration,
+    
+    /// <summary>
+    /// SSO Integration
+    /// </summary>
+    [EnumMember(Value = "sso_integration")]
+    SsoIntegration,
+    
+    /// <summary>
+    /// OAG Integration
+    /// </summary>
+    [EnumMember(Value = "oag")]
+    Oag
 }

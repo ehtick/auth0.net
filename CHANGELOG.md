@@ -1,5 +1,11 @@
 # Change Log
 
+## [7.43.1](https://github.com/auth0/auth0.net/tree/7.43.1) (2026-01-15)
+[Full Changelog](https://github.com/auth0/auth0.net/compare/7.43.0...7.43.1)
+
+**Added**
+- Updates ClientApplicationType Enum to include newly added app_types [\#901](https://github.com/auth0/auth0.net/pull/901) ([kailash-b](https://github.com/kailash-b))
+
 ## [7.43.0](https://github.com/auth0/auth0.net/tree/7.43.0) (2025-12-05)
 [Full Changelog](https://github.com/auth0/auth0.net/compare/7.42.0...7.43.0)
 

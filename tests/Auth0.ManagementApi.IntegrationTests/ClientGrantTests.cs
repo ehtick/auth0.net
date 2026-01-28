@@ -94,7 +94,9 @@ public class ClientGrantTests : IClassFixture<ClientGrantTestsFixture>
             {
                 "scope1",
                 "scope2"
-            }
+            },
+            SubjectType = ClientGrantSubjectType.User,
+            
         };
 
         var newClientGrantResponse = await fixture.ApiClient.ClientGrants.CreateAsync(newClientGrantRequest);
@@ -105,6 +107,9 @@ public class ClientGrantTests : IClassFixture<ClientGrantTestsFixture>
 
         fixture.TrackIdentifier(CleanUpType.ClientGrants, newClientGrantResponse.Id);
 
+        var fetchedSingleClientGrant = await fixture.ApiClient.ClientGrants.GetAsync(newClientGrantResponse.Id);
+        fetchedSingleClientGrant.Should().NotBeNull();
+        
         // Get all the client grants again, and verify we have one more
         var clientGrantsAfter = await fixture.ApiClient.ClientGrants.GetAllAsync(new GetClientGrantsRequest(), new PaginationInfo());
         clientGrantsAfter.Count.Should().Be(clientGrantsBefore.Count + 1);

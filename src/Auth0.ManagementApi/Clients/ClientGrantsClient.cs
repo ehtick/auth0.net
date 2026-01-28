@@ -68,6 +68,7 @@ public class ClientGrantsClient : BaseClient, IClientGrantsClient
         };
             
         queryStrings.AddIfNotEmpty("allow_any_organization", request.AllowAnyOrganization?.ToString() ?? string.Empty);
+        queryStrings.AddIfNotEmpty("subject_type", request.SubjectType?.ToString() ?? string.Empty);
 
         if (pagination != null)
         {
@@ -77,6 +78,14 @@ public class ClientGrantsClient : BaseClient, IClientGrantsClient
         }
 
         return Connection.GetAsync<IPagedList<ClientGrant>>(BuildUri("client-grants", queryStrings), DefaultHeaders, converters, cancellationToken);
+    }
+
+    
+    /// <inheritdoc/>
+    public Task<ClientGrant> GetAsync(string id, CancellationToken cancellationToken = default)
+    {
+        id.ThrowIfNull();
+        return Connection.GetAsync<ClientGrant>(BuildUri($"client-grants/{EncodePath(id)}"), DefaultHeaders, cancellationToken: cancellationToken);
     }
 
     /// <summary>

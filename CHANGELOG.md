@@ -1,5 +1,11 @@
 # Change Log
 
+## [7.44.0](https://github.com/auth0/auth0.net/tree/7.44.0) (2026-01-29)
+[Full Changelog](https://github.com/auth0/auth0.net/compare/7.43.1...7.44.0)
+
+**Added**
+- feat(mgmt): Adds support to manage App Access configuration [\#904](https://github.com/auth0/auth0.net/pull/904) ([kailash-b](https://github.com/kailash-b))
+
 ## [7.43.1](https://github.com/auth0/auth0.net/tree/7.43.1) (2026-01-15)
 [Full Changelog](https://github.com/auth0/auth0.net/compare/7.43.0...7.43.1)
 

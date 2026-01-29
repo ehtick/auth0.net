@@ -8,6 +8,16 @@
     <PackageId>Auth0.ManagementApi</PackageId>
   </PropertyGroup>
 
+  <!-- Management-specific overrides (independent versioning) -->
+  <PropertyGroup>
+    <Version>7.43.1</Version>
+    <AssemblyVersion>$(Version)</AssemblyVersion>
+    <AssemblyFileVersion>$(Version)</AssemblyFileVersion>
+    <InformationalVersion>$(Version)</InformationalVersion>
+    <PackageVersion>$(Version)</PackageVersion>
+    <PackageReleaseNotes>https://github.com/auth0/auth0.net/blob/master/src/Auth0.ManagementApi/CHANGELOG.md</PackageReleaseNotes>
+  </PropertyGroup>
+
   <!-- Project References -->
   <ItemGroup>
     <ProjectReference Include="..\Auth0.Core\Auth0.Core.csproj" />

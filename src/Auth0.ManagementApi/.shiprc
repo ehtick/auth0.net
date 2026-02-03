@@ -1,13 +1,13 @@
 {
+    "packageLabel": "mgmt",
     "files": {
-        "build/common.props": [],
+        "Auth0.ManagementApi.csproj": [],
         ".version": []
     },
     "prFilters": [
         {
             "type": "title",
-            "args": ["^mgmt:"],
-            "invert": true
+            "args": ["^mgmt:"]
         }
     ],
     "prefixVersion": false

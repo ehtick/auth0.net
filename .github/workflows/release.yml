@@ -54,12 +54,28 @@ jobs:
       PRODSEC_TOOLS_TOKEN: ${{ secrets.PRODSEC_TOOLS_TOKEN }}
       PRODSEC_TOOLS_ARN: ${{ secrets.PRODSEC_TOOLS_ARN }}
 
-  release:
+  auth:
+    name: Auth0.Core + Auth0.AuthenticationApi
     needs: [rl-scanner-core, rl-scanner-authentication, rl-scanner-management]
     uses: ./.github/workflows/nuget-release.yml
     with:
       dotnet-version: 8.0.x
-      project-paths: "['src/Auth0.Core/Auth0.Core.csproj', 'src/Auth0.AuthenticationApi/Auth0.AuthenticationApi.csproj', 'src/Auth0.ManagementApi/Auth0.ManagementApi.csproj']"
+      project-paths: "['src/Auth0.Core/Auth0.Core.csproj', 'src/Auth0.AuthenticationApi/Auth0.AuthenticationApi.csproj']"
+      working-directory: "./"
+      tag-prefix: ""
+    secrets:
+      nuget-token: ${{ secrets.NUGET_APIKEY }}
+      github-token: ${{ secrets.GITHUB_TOKEN }}
+
+  management:
+    name: Auth0.ManagementApi
+    needs: [rl-scanner-core, rl-scanner-authentication, rl-scanner-management]
+    uses: ./.github/workflows/nuget-release.yml
+    with:
+      dotnet-version: 8.0.x
+      project-paths: "['src/Auth0.ManagementApi/Auth0.ManagementApi.csproj']"
+      working-directory: "src/Auth0.ManagementApi"
+      tag-prefix: "mgmt-"
     secrets:
       nuget-token: ${{ secrets.NUGET_APIKEY }}
       github-token: ${{ secrets.GITHUB_TOKEN }}

@@ -4,10 +4,16 @@ on:
   workflow_call:
     inputs:
       dotnet-version:
-        required: true
+        default: '8.0.x'
         type: string
       project-paths:
         required: true
+        type: string
+      working-directory:
+        default: './'
+        type: string
+      tag-prefix:
+        default: ''
         type: string
     secrets:
       github-token:
@@ -30,6 +36,8 @@ jobs:
       # Get the version from the branch name
       - id: get_version
         uses: ./.github/actions/get-version
+        with:
+          working-directory: ${{ inputs.working-directory }}
 
       # Get the prerelease flag from the branch name
       - id: get_prerelease
@@ -42,7 +50,7 @@ jobs:
         uses: ./.github/actions/get-release-notes
         with:
           token: ${{ secrets.github-token }}
-          version: ${{ steps.get_version.outputs.version }}
+          version: ${{ inputs.tag-prefix }}${{ steps.get_version.outputs.version }}
           repo_owner: ${{ github.repository_owner }}
           repo_name: ${{ github.event.repository.name }}
 
@@ -50,15 +58,12 @@ jobs:
       - id: tag_exists
         uses: ./.github/actions/tag-exists
         with:
-          tag: ${{ steps.get_version.outputs.version }}
+          tag: ${{ inputs.tag-prefix }}${{ steps.get_version.outputs.version }}
           token: ${{ secrets.github-token }}
-
-      # If the tag already exists, exit with an error
-      - if: steps.tag_exists.outputs.exists == 'true'
-        run: exit 1
 
       # Publish the release to our package manager
       - uses: ./.github/actions/nuget-publish
+        if: steps.tag_exists.outputs.exists == 'false'
         with:
           dotnet-version: ${{ inputs.dotnet-version }}
           project-paths: ${{ inputs.project-paths }}
@@ -68,10 +73,11 @@ jobs:
 
       # Create a release for the tag
       - uses: ./.github/actions/release-create
+        if: steps.tag_exists.outputs.exists == 'false'
         with:
           token: ${{ secrets.github-token }}
-          name: ${{ steps.get_version.outputs.version }}
+          name: ${{ inputs.tag-prefix }}${{ steps.get_version.outputs.version }}
           body: ${{ steps.get_release_notes.outputs.release-notes }}
-          tag: ${{ steps.get_version.outputs.version }}
+          tag: ${{ inputs.tag-prefix }}${{ steps.get_version.outputs.version }}
           commit: ${{ github.sha }}
           prerelease: ${{ steps.get_prerelease.outputs.prerelease }}

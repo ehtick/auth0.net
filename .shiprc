@@ -3,11 +3,11 @@
         "build/common.props": [],
         ".version": []
     },
-    "packageLabel": "auth",
     "prFilters": [
         {
             "type": "title",
-            "args": ["^[Ff][Ee][Aa][Tt]\\([Aa][Uu][Tt][Hh]\\):"]
+            "args": ["^mgmt:"],
+            "invert": true
         }
     ],
     "prefixVersion": false

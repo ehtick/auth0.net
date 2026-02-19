@@ -10,10 +10,12 @@ public class ExtensionTests
     [Theory]
     [InlineData("b=per_hour;q=2;r=1;t=3452", "per_hour", 2, 1, 3452)]
     [InlineData("b=per_day;q=100;r=99;t=3524", "per_day", 100, 99, 3524)]
+    [InlineData("b=per_hour;q=100;r=50;t=3600;x=extra", "per_hour", 100, 50, 3600)]
+    [InlineData("b=per=hour;q=100;r=50;t=3600", "per=hour", 100, 50, 3600)]
     public async void ParseQuotaLimit_Parses_Successfully_For_Valid_Values(
         string input, string bucket, int q, int r, int t)
     {
-        var quotaLimit = Extensions.ParseQuotaLimit(input, out string actualBucket);
+        var quotaLimit = Extensions.ParseQuotaLimit(input, out var actualBucket);
 
         quotaLimit.Should().NotBeNull();
         quotaLimit.Quota.Should().Be(q);
@@ -23,10 +25,26 @@ public class ExtensionTests
     }
         
     [Fact]
-    public async void ParseQuotaLimit_Should_Return_NULL_For_NULL_Inupt()
+    public async void ParseQuotaLimit_Should_Return_NULL_For_NULL_Input()
     {
-        var quotaLimit = Extensions.ParseQuotaLimit(null, out string actualBucket);
+        var quotaLimit = Extensions.ParseQuotaLimit(null, out var actualBucket);
         quotaLimit.Should().BeNull();
+    }
+        
+    [Theory]
+    [InlineData("b=per_hour;q=100;r=50", "Missing field")]
+    [InlineData("b=per_hour;b=per_day;q=100;r=50;t=3600", "Duplicate key")]
+    [InlineData("b=per_hour;;q=100;r=50;t=3600", "Empty segment")]
+    [InlineData("b=per_hour;q100;r=50;t=3600", "No equals sign")]
+    [InlineData("=per_hour;q=100;r=50;t=3600", "Empty key")]
+    [InlineData("b=;q=100;r=50;t=3600", "Empty value")]
+    [InlineData("b=per_hour;q=abc;r=50;t=3600", "Non-numeric quota")]
+    [InlineData("b=per_hour;q=999999999999999999999;r=50;t=3600", "Overflow")]
+    public async void ParseQuotaLimit_Should_Return_NULL_For_Invalid_Input(
+        string input, string scenario)
+    {
+        var quotaLimit = Extensions.ParseQuotaLimit(input, out _);
+        quotaLimit.Should().BeNull(because: scenario);
     }
         
     [Theory]

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Dynamic;
+using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -240,8 +241,7 @@ public class AuthenticationApiClient : IAuthenticationApiClient
         body.AddIfNotEmpty("realm", request.Realm);
         body.Add("grant_type", String.IsNullOrEmpty(request.Realm) ? "password" : "http://auth0.com/oauth/grant-type/password-realm");
 
-        var headers = String.IsNullOrEmpty(request.ForwardedForIp) ? null
-            : new Dictionary<string, string> { { "auth0-forwarded-for", request.ForwardedForIp } };
+        var headers = BuildForwardedForHeaders(request.ForwardedForIp);
 
         var response = await connection.SendAsync<AccessTokenResponse>(
             HttpMethod.Post,
@@ -300,8 +300,7 @@ public class AuthenticationApiClient : IAuthenticationApiClient
 
         ApplyClientAuthentication(request, body);
 
-        var headers = String.IsNullOrEmpty(request.ForwardedForIp) ? null
-            : new Dictionary<string, string> { { "auth0-forwarded-for", request.ForwardedForIp } };
+        var headers = BuildForwardedForHeaders(request.ForwardedForIp);
 
         var response = await connection.SendAsync<AccessTokenResponse>(
             HttpMethod.Post,
@@ -421,8 +420,7 @@ public class AuthenticationApiClient : IAuthenticationApiClient
             phone_number = request.PhoneNumber
         };
 
-        var headers = String.IsNullOrEmpty(request.ForwardedForIp) ? null
-            : new Dictionary<string, string> { { "auth0-forwarded-for", request.ForwardedForIp } };
+        var headers = BuildForwardedForHeaders(request.ForwardedForIp);
 
         return connection.SendAsync<PasswordlessSmsResponse>(
             HttpMethod.Post,
@@ -724,6 +722,19 @@ public class AuthenticationApiClient : IAuthenticationApiClient
     private IDictionary<string, string> BuildHeaders(string accessToken)
     {
         return new Dictionary<string, string> { { "Authorization", "Bearer " + accessToken } };
+    }
+
+    internal static IDictionary<string, string>? BuildForwardedForHeaders(string? forwardedForIp)
+    {
+        if (String.IsNullOrEmpty(forwardedForIp))
+            return null;
+
+        if (!IPAddress.TryParse(forwardedForIp, out _))
+            throw new ArgumentException(
+                $"ForwardedForIp must be a valid IPv4 or IPv6 address, got: '{forwardedForIp}'.",
+                nameof(forwardedForIp));
+
+        return new Dictionary<string, string> { { "auth0-forwarded-for", forwardedForIp! } };
     }
 
     private void ApplyClientAuthentication(IClientAuthentication request, Dictionary<string, string> body, bool requireSecret = false)

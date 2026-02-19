@@ -352,3 +352,4 @@ MigrationBackup/
 .idea/*
 
 .vscode/*
+src/Auth0.ManagementApi/.DS_Store

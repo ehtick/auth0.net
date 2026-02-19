@@ -107,7 +107,7 @@ public class UtilsTests
     {
         var input = new byte[] { 72 };
         var result = Utils.Base64UrlEncode(input);
-        result.Should().Be("SA==");
+        result.Should().Be("SA");
     }
 
     [Fact]
@@ -115,7 +115,7 @@ public class UtilsTests
     {
         var input = Encoding.UTF8.GetBytes("Hello");
         var result = Utils.Base64UrlEncode(input);
-        result.Should().Be("SGVsbG8=");
+        result.Should().Be("SGVsbG8");
     }
 
     [Fact]
@@ -127,19 +127,19 @@ public class UtilsTests
     }
 
     [Fact]
-    public void Base64UrlEncode_WithBytesRequiringOnePaddingChar_ReturnsStringWithOnePaddingChar()
+    public void Base64UrlEncode_WithBytesRequiringOnePaddingChar_ReturnsStringWithoutPaddingChar()
     {
         var input = Encoding.UTF8.GetBytes("Ma");
         var result = Utils.Base64UrlEncode(input);
-        result.Should().Be("TWE=");
+        result.Should().Be("TWE");
     }
 
     [Fact]
-    public void Base64UrlEncode_WithBytesRequiringTwoPaddingChars_ReturnsStringWithTwoPaddingChars()
+    public void Base64UrlEncode_WithBytesRequiringTwoPaddingChars_ReturnsStringWithoutPaddingChars()
     {
         var input = Encoding.UTF8.GetBytes("M");
         var result = Utils.Base64UrlEncode(input);
-        result.Should().Be("TQ==");
+        result.Should().Be("TQ");
     }
 
     [Fact]
@@ -147,7 +147,7 @@ public class UtilsTests
     {
         var input = new byte[] { 0, 0, 0, 0 };
         var result = Utils.Base64UrlEncode(input);
-        result.Should().Be("AAAAAA==");
+        result.Should().Be("AAAAAA");
     }
 
     [Fact]
@@ -155,7 +155,7 @@ public class UtilsTests
     {
         var input = new byte[] { 255, 255, 255, 255 };
         var result = Utils.Base64UrlEncode(input);
-        result.Should().Be("/////w==");
+        result.Should().Be("_____w");
     }
 
     [Fact]

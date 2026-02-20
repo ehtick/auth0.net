@@ -116,7 +116,7 @@ public class JobsClient : BaseClient, IJobsClient
             Connection.GetAsync<string>(
                 BuildUri($"jobs/{EncodePath(id)}/errors"), DefaultHeaders, cancellationToken: cancellationToken).Result;
 
-        if (string.IsNullOrEmpty(rawResponse)) return null;
+        if (string.IsNullOrEmpty(rawResponse)) return Task.FromResult<JobError>(null!);;
 
         try
         {
@@ -128,10 +128,16 @@ public class JobsClient : BaseClient, IJobsClient
                     JobImportErrorDetails = jobImportErrorDetails
                 });
             }
+
+            // Empty array means no errors
+            if (jobImportErrorDetails != null)
+            {
+                return Task.FromResult<JobError>(null!);
+            }
         }
-        catch (JsonSerializationException ex)
+        catch (JsonSerializationException)
         {
-            // ignoring the exception to try to serialize to JobErrorDetails.     
+            // ignoring the exception to try to deserialize to JobErrorDetails.
         }
 
         var jobErrorDetails = JsonConvert.DeserializeObject<JobErrorDetails>(rawResponse);
@@ -143,6 +149,6 @@ public class JobsClient : BaseClient, IJobsClient
             });
         }
 
-        return null;
+        return Task.FromResult<JobError>(null!);
     }
 }

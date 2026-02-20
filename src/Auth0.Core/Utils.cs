@@ -27,9 +27,9 @@ internal static class Utils
     internal static string Base64UrlEncode(byte[] input)
     {
         var output = Convert.ToBase64String(input);
-        output = output.Replace('-', '+');
-        output = output.Replace('_', '/');
-        output = output.PadRight(output.Length + (4 - output.Length % 4) % 4, '=');
+        output = output.Replace('+', '-');
+        output = output.Replace('/', '_');
+        output = output.TrimEnd('=');
 
         return output;
     }

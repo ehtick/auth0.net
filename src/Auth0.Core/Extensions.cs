@@ -92,16 +92,44 @@ public static class Extensions
         if (string.IsNullOrEmpty(headerValue))
             return null;
 
-        var kvp = headerValue
-            .Split(';')
-            .Select(x => x.Split('='))
-            .ToDictionary(keyValue => keyValue[0], keyValue => keyValue[1]);
-        bucket = kvp["b"];
+        var kvp = new Dictionary<string, string>();
+        foreach (var segment in headerValue.Split(';'))
+        {
+            var parts = segment.Split(['='], 2);
+            if (parts.Length != 2 || parts[0].Length == 0 || parts[1].Length == 0)
+                return null;
+
+            var key = parts[0];
+            var value = parts[1];
+
+            // Duplicate keys indicate a malformed header
+            if (kvp.ContainsKey(key))
+                return null;
+
+            kvp[key] = value;
+        }
+
+        if (!kvp.TryGetValue("b", out var bucketValue)
+            || !kvp.TryGetValue("q", out var quota)
+            || !kvp.TryGetValue("r", out var remaining)
+            || !kvp.TryGetValue("t", out var resetAfter))
+        {
+            return null;
+        }
+
+        if (!int.TryParse(quota, out var quotaInt)
+            || !int.TryParse(remaining, out var remainingInt)
+            || !int.TryParse(resetAfter, out var resetAfterInt))
+        {
+            return null;
+        }
+
+        bucket = bucketValue;
         return new QuotaLimit
         {
-            Quota = int.Parse(kvp["q"]),
-            Remaining = int.Parse(kvp["r"]),
-            ResetAfter = int.Parse(kvp["t"])
+            Quota = quotaInt,
+            Remaining = remainingInt,
+            ResetAfter = resetAfterInt
         };
     }
 }

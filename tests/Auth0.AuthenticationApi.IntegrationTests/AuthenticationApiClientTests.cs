@@ -1,4 +1,5 @@
 ﻿using Auth0.Tests.Shared;
+using FluentAssertions;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -45,5 +46,61 @@ public class AuthenticationApiClientTests : TestBase
         {
             return Task.FromResult(default(T));
         }
+    }
+
+    [Fact]
+    public void BuildForwardedForHeaders_WithNull_ReturnsNull()
+    {
+        var result = AuthenticationApiClient.BuildForwardedForHeaders(null);
+        result.Should().BeNull();
+    }
+
+    [Fact]
+    public void BuildForwardedForHeaders_WithEmptyString_ReturnsNull()
+    {
+        var result = AuthenticationApiClient.BuildForwardedForHeaders(string.Empty);
+        result.Should().BeNull();
+    }
+
+    [Fact]
+    public void BuildForwardedForHeaders_WithValidIPv4_ReturnsHeader()
+    {
+        var result = AuthenticationApiClient.BuildForwardedForHeaders("192.168.1.1");
+        result.Should().NotBeNull();
+        result.Should().ContainKey("auth0-forwarded-for");
+        result["auth0-forwarded-for"].Should().Be("192.168.1.1");
+    }
+
+    [Fact]
+    public void BuildForwardedForHeaders_WithValidIPv6_ReturnsHeader()
+    {
+        var result = AuthenticationApiClient.BuildForwardedForHeaders("2001:db8::1");
+        result.Should().NotBeNull();
+        result.Should().ContainKey("auth0-forwarded-for");
+        result["auth0-forwarded-for"].Should().Be("2001:db8::1");
+    }
+
+    [Fact]
+    public void BuildForwardedForHeaders_ValidIPv4_HeaderValueMatchesInput()
+    {
+        var ip = "10.0.0.255";
+        var result = AuthenticationApiClient.BuildForwardedForHeaders(ip);
+        result["auth0-forwarded-for"].Should().Be(ip);
+    }
+
+    [Fact]
+    public void BuildForwardedForHeaders_WithHostname_ThrowsArgumentException()
+    {
+        Action act = () => AuthenticationApiClient.BuildForwardedForHeaders("example.com");
+        act.Should().Throw<ArgumentException>()
+            .And.ParamName.Should().Be("forwardedForIp");
+    }
+
+    [Fact]
+    public void BuildForwardedForHeaders_WithArbitraryString_ThrowsArgumentException()
+    {
+        Action act = () => AuthenticationApiClient.BuildForwardedForHeaders("not-an-ip");
+        act.Should().Throw<ArgumentException>()
+            .And.ParamName.Should().Be("forwardedForIp");
     }
 }

@@ -29,7 +29,6 @@ public class ClientInitiatedBackchannelAuthorizationTests : TestBase
         var mockTokenResponse = new ClientInitiatedBackchannelAuthorizationTokenResponse()
         {
             AccessToken = "This is a mock access_token",
-            IdToken = "This is a mock ID token",
             ExpiresIn = 300,
             Scope = "openid"
         };

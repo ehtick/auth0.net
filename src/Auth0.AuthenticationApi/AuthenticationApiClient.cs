@@ -532,6 +532,14 @@ public class AuthenticationApiClient : IAuthenticationApiClient
             cancellationToken: cancellationToken
         ).ConfigureAwait(false);
 
+        await AssertIdTokenValidIfExisting(
+            response.IdToken,
+            request.ClientId,
+            request.SigningAlgorithm,
+            request.ClientSecret,
+            request.Organization
+        ).ConfigureAwait(false);
+
         return response;
     }
 

@@ -72,6 +72,13 @@ public record CreateResourceServerResponseContent : IJsonOnDeserialized
     public bool? AllowOnlineAccess { get; set; }
 
     /// <summary>
+    /// Whether Online Refresh Tokens can be issued even when sessions are configured as ephemeral (true) or not (false).
+    /// </summary>
+    [Optional]
+    [JsonPropertyName("allow_online_access_with_ephemeral_sessions")]
+    public bool? AllowOnlineAccessWithEphemeralSessions { get; set; }
+
+    /// <summary>
     /// Whether to skip user consent for applications flagged as first party (true) or not (false).
     /// </summary>
     [Optional]

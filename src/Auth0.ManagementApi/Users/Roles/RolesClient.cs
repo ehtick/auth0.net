@@ -107,10 +107,14 @@ public partial class RolesClient : IRolesClient
             {
                 switch (response.StatusCode)
                 {
+                    case 400:
+                        throw new BadRequestError(JsonUtils.Deserialize<object>(responseBody));
                     case 401:
                         throw new UnauthorizedError(JsonUtils.Deserialize<object>(responseBody));
                     case 403:
                         throw new ForbiddenError(JsonUtils.Deserialize<object>(responseBody));
+                    case 404:
+                        throw new NotFoundError(JsonUtils.Deserialize<object>(responseBody));
                     case 429:
                         throw new TooManyRequestsError(JsonUtils.Deserialize<object>(responseBody));
                 }

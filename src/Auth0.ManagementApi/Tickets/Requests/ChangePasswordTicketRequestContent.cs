@@ -7,7 +7,7 @@ namespace Auth0.ManagementApi;
 public record ChangePasswordTicketRequestContent
 {
     /// <summary>
-    /// URL the user will be redirected to in the classic Universal Login experience once the ticket is used. Cannot be specified when using client_id or organization_id.
+    /// URL the user will be redirected to in the classic Universal Login experience once the ticket is used. Cannot be specified when using organization_id. May be specified together with client_id when the tenant has a custom password reset page enabled and a password-reset-post-challenge Action bound.
     /// </summary>
     [Optional]
     [JsonPropertyName("result_url")]

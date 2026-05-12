@@ -38,6 +38,10 @@ public class ListTest : BaseMockServerTest
                   "credential_backed_up": true,
                   "identity_user_id": "identity_user_id",
                   "user_agent": "user_agent",
+                  "user_handle": "user_handle",
+                  "transports": [
+                    "transports"
+                  ],
                   "aaguid": "aaguid",
                   "relying_party_identifier": "relying_party_identifier"
                 }

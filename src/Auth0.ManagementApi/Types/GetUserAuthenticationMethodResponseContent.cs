@@ -126,6 +126,20 @@ public record GetUserAuthenticationMethodResponseContent : IJsonOnDeserialized
     public string? UserAgent { get; set; }
 
     /// <summary>
+    /// Applies to passkeys only. The user handle of the user identity.
+    /// </summary>
+    [Optional]
+    [JsonPropertyName("user_handle")]
+    public string? UserHandle { get; set; }
+
+    /// <summary>
+    /// Applies to passkeys only. The transports used by clients to communicate with the authenticator.
+    /// </summary>
+    [Optional]
+    [JsonPropertyName("transports")]
+    public IEnumerable<string>? Transports { get; set; }
+
+    /// <summary>
     /// Applies to passkey authentication methods only. Authenticator Attestation Globally Unique Identifier.
     /// </summary>
     [Optional]

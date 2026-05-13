@@ -33,9 +33,8 @@ public record CreateConnectionRequestContentOidc : IJsonOnDeserialized
     [JsonPropertyName("show_as_button")]
     public bool? ShowAsButton { get; set; }
 
-    [Optional]
     [JsonPropertyName("name")]
-    public string? Name { get; set; }
+    public required string Name { get; set; }
 
     /// <summary>
     /// Use of this property is NOT RECOMMENDED. Use the PATCH /v2/connections/{id}/clients endpoint to enable the connection for a set of clients.

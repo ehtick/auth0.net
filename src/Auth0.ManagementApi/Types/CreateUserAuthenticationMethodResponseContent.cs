@@ -91,6 +91,45 @@ public record CreateUserAuthenticationMethodResponseContent : IJsonOnDeserialize
     [JsonPropertyName("relying_party_identifier")]
     public string? RelyingPartyIdentifier { get; set; }
 
+    [Optional]
+    [JsonPropertyName("credential_device_type")]
+    public CredentialDeviceTypeEnum? CredentialDeviceType { get; set; }
+
+    /// <summary>
+    /// Applies to passkeys only. Whether the credential was backed up.
+    /// </summary>
+    [Optional]
+    [JsonPropertyName("credential_backed_up")]
+    public bool? CredentialBackedUp { get; set; }
+
+    /// <summary>
+    /// Applies to passkeys only. The ID of the user identity linked with the authentication method.
+    /// </summary>
+    [Optional]
+    [JsonPropertyName("identity_user_id")]
+    public string? IdentityUserId { get; set; }
+
+    /// <summary>
+    /// Applies to passkeys only. The user-agent of the browser used to create the passkey.
+    /// </summary>
+    [Optional]
+    [JsonPropertyName("user_agent")]
+    public string? UserAgent { get; set; }
+
+    /// <summary>
+    /// Applies to passkeys only. The user handle of the user identity.
+    /// </summary>
+    [Optional]
+    [JsonPropertyName("user_handle")]
+    public string? UserHandle { get; set; }
+
+    /// <summary>
+    /// Applies to passkeys only. The transports used by clients to communicate with the authenticator.
+    /// </summary>
+    [Optional]
+    [JsonPropertyName("transports")]
+    public IEnumerable<string>? Transports { get; set; }
+
     /// <summary>
     /// Authentication method creation date
     /// </summary>

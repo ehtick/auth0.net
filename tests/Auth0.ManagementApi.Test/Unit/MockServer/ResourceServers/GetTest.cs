@@ -28,6 +28,7 @@ public class GetTest : BaseMockServerTest
               "signing_secret": "signing_secret",
               "allow_offline_access": true,
               "allow_online_access": true,
+              "allow_online_access_with_ephemeral_sessions": true,
               "skip_consent_for_verifiable_first_party_clients": true,
               "token_lifetime": 1,
               "token_lifetime_for_web": 1,

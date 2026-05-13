@@ -27,6 +27,13 @@ public record RevokeRefreshTokensRequestContent
     [JsonPropertyName("client_id")]
     public string? ClientId { get; set; }
 
+    /// <summary>
+    /// Resource server identifier (audience) to scope the revocation. Must be used with both `user_id` and `client_id`.
+    /// </summary>
+    [Optional]
+    [JsonPropertyName("audience")]
+    public string? Audience { get; set; }
+
     /// <inheritdoc />
     public override string ToString()
     {

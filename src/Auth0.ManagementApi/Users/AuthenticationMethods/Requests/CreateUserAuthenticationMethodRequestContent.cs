@@ -43,18 +43,25 @@ public record CreateUserAuthenticationMethodRequestContent
     public PreferredAuthenticationMethodEnum? PreferredAuthenticationMethod { get; set; }
 
     /// <summary>
-    /// Applies to webauthn authentication methods only. The id of the credential.
+    /// Applies to webauthn/passkey authentication methods only. The id of the credential.
     /// </summary>
     [Optional]
     [JsonPropertyName("key_id")]
     public string? KeyId { get; set; }
 
     /// <summary>
-    /// Applies to webauthn authentication methods only. The public key, which is encoded as base64.
+    /// Applies to webauthn/passkey authentication methods only. The public key, which is encoded as base64.
     /// </summary>
     [Optional]
     [JsonPropertyName("public_key")]
     public string? PublicKey { get; set; }
+
+    /// <summary>
+    /// Applies to passkeys only. Authenticator Attestation Globally Unique Identifier
+    /// </summary>
+    [Optional]
+    [JsonPropertyName("aaguid")]
+    public string? Aaguid { get; set; }
 
     /// <summary>
     /// Applies to webauthn authentication methods only. The relying party identifier.
@@ -62,6 +69,45 @@ public record CreateUserAuthenticationMethodRequestContent
     [Optional]
     [JsonPropertyName("relying_party_identifier")]
     public string? RelyingPartyIdentifier { get; set; }
+
+    [Optional]
+    [JsonPropertyName("credential_device_type")]
+    public CredentialDeviceTypeEnum? CredentialDeviceType { get; set; }
+
+    /// <summary>
+    /// Applies to passkeys only. Whether the credential was backed up.
+    /// </summary>
+    [Optional]
+    [JsonPropertyName("credential_backed_up")]
+    public bool? CredentialBackedUp { get; set; }
+
+    /// <summary>
+    /// Applies to passkeys only. The ID of the user identity linked with the authentication method.
+    /// </summary>
+    [Optional]
+    [JsonPropertyName("identity_user_id")]
+    public string? IdentityUserId { get; set; }
+
+    /// <summary>
+    /// Applies to passkeys only. The user-agent of the browser used to create the passkey.
+    /// </summary>
+    [Optional]
+    [JsonPropertyName("user_agent")]
+    public string? UserAgent { get; set; }
+
+    /// <summary>
+    /// Applies to passkeys only. The user handle of the user identity.
+    /// </summary>
+    [Optional]
+    [JsonPropertyName("user_handle")]
+    public string? UserHandle { get; set; }
+
+    /// <summary>
+    /// Applies to passkeys only. The transports used by clients to communicate with the authenticator.
+    /// </summary>
+    [Optional]
+    [JsonPropertyName("transports")]
+    public IEnumerable<string>? Transports { get; set; }
 
     /// <inheritdoc />
     public override string ToString()

@@ -1,5 +1,23 @@
 # Change Log
 
+## [mgmt-8.3.0](https://github.com/auth0/auth0.net/tree/mgmt-8.3.0) (2026-05-13)
+[Full Changelog](https://github.com/auth0/auth0.net/compare/mgmt-8.2.0...mgmt-8.3.0)
+
+**Added**
+- Added `UserDateSchemaExtensions` with `ToDateTime(this UserDateSchema?)` and `ToDateTime(this UserDateSchema?, TimeZoneInfo)` extension methods to convert user date fields (e.g. `created_at`, `last_login`) to `DateTime?` [\#1009](https://github.com/auth0/auth0.net/pull/1009) ([kailash-b](https://github.com/kailash-b))
+- Resource Servers: Added `AllowOnlineAccessWithEphemeralSessions` (`bool?`) property to `ResourceServer`, `CreateResourceServerRequestContent`, `UpdateResourceServerRequestContent`, `GetResourceServerResponseContent`, `CreateResourceServerResponseContent`, and `UpdateResourceServerResponseContent` for ephemeral session support [\#1007](https://github.com/auth0/auth0.net/pull/1007) ([fern-api[bot]](https://github.com/apps/fern-api))
+- Refresh Tokens: Added `Audience` (`string`) property to `RevokeRefreshTokensRequestContent` to scope bulk token revocation by resource server identifier [\#1007](https://github.com/auth0/auth0.net/pull/1007) ([fern-api[bot]](https://github.com/apps/fern-api))
+- User Authentication Methods: Added passkey-specific properties (`Aaguid`, `CredentialDeviceType`, `CredentialBackedUp`, `IdentityUserId`, `UserAgent`, `UserHandle`, `Transports`) to `CreateUserAuthenticationMethodRequestContent` [\#1007](https://github.com/auth0/auth0.net/pull/1007) ([fern-api[bot]](https://github.com/apps/fern-api))
+- User Authentication Methods: Added `UserHandle` and `Transports` properties to `GetUserAuthenticationMethodResponseContent` and `UserAuthenticationMethod` response types [\#1007](https://github.com/auth0/auth0.net/pull/1007) ([fern-api[bot]](https://github.com/apps/fern-api))
+- User Authentication Methods: Added new `CredentialDeviceTypeEnum` type with `single_device` and `multi_device` values [\#1007](https://github.com/auth0/auth0.net/pull/1007) ([fern-api[bot]](https://github.com/apps/fern-api))
+- Error handling: Added new structured error schema types `BadRequestSchema`, `ForbiddenSchema`, `UnauthorizedSchema`, and `TooManyRequestsSchema` with associated `*Error` enum types [\#1007](https://github.com/auth0/auth0.net/pull/1007) ([fern-api[bot]](https://github.com/apps/fern-api))
+
+**Fixed**
+- Error handling: Added `400 BadRequest` and `404 NotFound` error handling to `Users.Roles` client [\#1007](https://github.com/auth0/auth0.net/pull/1007) ([fern-api[bot]](https://github.com/apps/fern-api))
+
+**Changed**
+- Connections: Made `id` and `name` fields `required` (non-nullable) on all `ConnectionResponseContent*` types and `ConnectionResponseCommon` [\#1007](https://github.com/auth0/auth0.net/pull/1007) ([fern-api[bot]](https://github.com/apps/fern-api))
+
 ## [mgmt-8.2.0](https://github.com/auth0/auth0.net/tree/mgmt-8.2.0) (2026-04-30)
 [Full Changelog](https://github.com/auth0/auth0.net/compare/mgmt-8.1.0...mgmt-8.2.0)
 

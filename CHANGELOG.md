@@ -1,5 +1,17 @@
 # Change Log
 
+## [7.46.0](https://github.com/auth0/auth0.net/tree/7.46.0) (2026-05-13)
+[Full Changelog](https://github.com/auth0/auth0.net/compare/7.45.1...7.46.0)
+
+**Added**
+- Adds id token validation in CIBA flow [\#1003](https://github.com/auth0/auth0.net/pull/1003) ([kailash-b](https://github.com/kailash-b))
+- Accepts expected nonce value from user for Id token validation [\#971](https://github.com/auth0/auth0.net/pull/971) ([kailash-b](https://github.com/kailash-b))
+
+**Security**
+- Bump `Microsoft.IdentityModel.Protocols.OpenIdConnect` and `System.IdentityModel.Tokens.Jwt` from 8.17.0 to 8.18.0 [\#1004](https://github.com/auth0/auth0.net/pull/1004) ([kailash-b](https://github.com/kailash-b))
+- Bump `actions/upload-pages-artifact` from 4 to 5 [\#1004](https://github.com/auth0/auth0.net/pull/1004) ([kailash-b](https://github.com/kailash-b))
+- Upgrade codecov-action to 6.0.0 and deploy-pages to 5.0 [\#977](https://github.com/auth0/auth0.net/pull/977) ([kailash-b](https://github.com/kailash-b))
+
 ## [7.45.1](https://github.com/auth0/auth0.net/tree/7.45.1) (2026-03-26)
 [Full Changelog](https://github.com/auth0/auth0.net/compare/7.45.0...7.45.1)
 

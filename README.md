@@ -1,7 +1,9 @@
 ![.NET client for Auth0 Authentication and Management APIs](https://cdn.auth0.com/website/sdks/banners/auth0-net-banner.png)
 
-![Release](https://img.shields.io/github/v/release/auth0/auth0.net)
-![Downloads](https://img.shields.io/nuget/dt/auth0.core)
+[![Auth0.ManagementApi NuGet](https://img.shields.io/nuget/v/Auth0.ManagementApi?label=Auth0.ManagementApi)](https://www.nuget.org/packages/Auth0.ManagementApi)
+[![Auth0.ManagementApi Downloads](https://img.shields.io/nuget/dt/Auth0.ManagementApi?label=downloads)](https://www.nuget.org/packages/Auth0.ManagementApi)
+[![Auth0.AuthenticationApi NuGet](https://img.shields.io/nuget/v/Auth0.AuthenticationApi?label=Auth0.AuthenticationApi)](https://www.nuget.org/packages/Auth0.AuthenticationApi)
+[![Auth0.AuthenticationApi Downloads](https://img.shields.io/nuget/dt/Auth0.AuthenticationApi?label=downloads)](https://www.nuget.org/packages/Auth0.AuthenticationApi)
 [![License](https://img.shields.io/:license-MIT-blue.svg?style=flat)](https://opensource.org/licenses/MIT)
 [![Build and Test](https://github.com/auth0/auth0.net/actions/workflows/build.yml/badge.svg)](https://github.com/auth0/auth0.net/actions/workflows/build.yml)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/auth0/auth0.net)
